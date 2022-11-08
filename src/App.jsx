@@ -1,4 +1,4 @@
-import Home from "./Components/Home/index"
+import Home from "./Components/SignIn/index"
 import './App.css';
 
 function App() {
