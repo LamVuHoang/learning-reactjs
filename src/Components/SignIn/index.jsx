@@ -3,8 +3,7 @@ import Home from "../Home";
 import { Form, Input, SubmitButton } from "../../UI";
 
 export default function Index() {
-  const data = window.localStorage.getItem("token");
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,6 +15,12 @@ export default function Index() {
     window.localStorage.setItem("token", "1");
     setEmail("");
     setPassword("");
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    window.localStorage.removeItem("token");
+    setIsLoggedIn(false);
   };
 
   const handleInputEmail = (e) => {
@@ -26,16 +31,13 @@ export default function Index() {
     setPassword(e.target.value);
   };
 
-  // useEffect(() => {
-  // }, [email, password]);
-
   return (
     <>
       <section className="h-screen">
         <div className="px-6 h-full text-gray-800">
           <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
-            {window.localStorage.getItem("token") ? (
-              <Home />
+            {isLoggedIn ? (
+              <Home onLogout={handleLogout} />
             ) : (
               <div className="grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
                 <img
