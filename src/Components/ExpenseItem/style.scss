@@ -1,0 +1,17 @@
+.myRow {
+    @apply p-1 pt-5 pb-5 m-1 rounded-lg border-solid border-4 border-indigo-600;
+
+    // vertical-align: middle;
+}
+
+.brief {
+    @apply text-2xl font-bold;
+
+    // vertical-align: middle;
+}
+
+.price {
+    @apply  text-2xl border-2 border-solid text-white font-bold border-yellow-200 bg-red-500 p-2 pl-10 pr-10 rounded-md;
+
+    // vertical-align: middle;
+}
