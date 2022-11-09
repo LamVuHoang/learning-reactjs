@@ -9,6 +9,7 @@ export function Input(props) {
           onChange={props.onChange}
           value={props.value}
         />
+        <div className="text-red-500">{props.error}</div>
       </div>
     </>
   );
