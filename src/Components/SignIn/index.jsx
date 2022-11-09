@@ -1,34 +1,38 @@
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import Home from "../Home";
-import { Form, Input, SubmitButton } from "../../UI";
+import { Form, SubmitButton } from "../../UI";
 
 export default function Index() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const refEmail = useRef();
+  const refPassword = useRef();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log(`email: ${email}, password: ${password}`);
+    const inputEmail = refEmail.current.value;
+    const inputPassword = refPassword.current.value;
 
-    window.localStorage.setItem("token", "1");
-    setEmail("");
-    setPassword("");
-    setIsLoggedIn(true);
+    if (inputEmail === "") {
+      refEmail.current.focus();
+    } else if (inputPassword === "") {
+      refPassword.current.focus();
+    } else {
+      window.localStorage.setItem("token", "1");
+      setIsLoggedIn(true);
+    }
+
+    // console.log(
+    //   "refEmail: ",
+    //   refEmail.current.value,
+    //   ", refPassword: ",
+    //   refPassword.current.value
+    // );
   };
 
   const handleLogout = () => {
     window.localStorage.removeItem("token");
     setIsLoggedIn(false);
-  };
-
-  const handleInputEmail = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handleInputPassword = (e) => {
-    setPassword(e.target.value);
   };
 
   return (
@@ -52,21 +56,22 @@ export default function Index() {
               className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0"
               onSubmit={handleSubmit}
             >
-              <Input
-                value={email}
-                onChange={handleInputEmail}
-                margin="mb-6"
-                type="text"
-                placeholder="Email address"
-              />
-              <Input
-                value={password}
-                onChange={handleInputPassword}
-                margin="mb-6"
-                type="password"
-                placeholder="Password"
-              />
-
+              <div className="mb-6">
+                <input
+                  type="text"
+                  className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                  placeholder="Email address"
+                  ref={refEmail}
+                />
+              </div>
+              <div className="mb-6">
+                <input
+                  type="password"
+                  className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                  placeholder="Password"
+                  ref={refPassword}
+                />
+              </div>
               <SubmitButton margin="text-center lg:text-left" label="Login" />
             </Form>
           </div>

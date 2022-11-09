@@ -1,4 +1,4 @@
-export function Input(props) {
+export function Input(props, ref) {
   return (
     <>
       <div className={props.margin}>
@@ -8,6 +8,7 @@ export function Input(props) {
           placeholder={props.placeholder}
           onChange={props.onChange}
           value={props.value}
+          ref={ref}
         />
       </div>
     </>
