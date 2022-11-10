@@ -1,6 +1,6 @@
-import { useEffect, useReducer, useState } from "react";
-import Home from "../Home";
+import { useEffect, useReducer, useState, useContext } from "react";
 import { Form, Input, SubmitButton } from "../../UI";
+import { authContext } from "../../Store/auth-context";
 
 const initialState = { email: "", password: "" };
 const thisReducer = (state, action) => {
@@ -30,7 +30,7 @@ const thisReducer = (state, action) => {
 };
 
 export default function Index() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const ctx = useContext(authContext);
   const [disableButton, setDisableButton] = useState(true);
   const [data, dispatchData] = useReducer(thisReducer, initialState);
   const [formError, setFormError] = useState({
@@ -56,7 +56,8 @@ export default function Index() {
       }
     }
     if (data.password.length > 0) {
-      const regularExpressionPassword = /a/;
+      const regularExpressionPassword =
+        /(.*[a-z].*)(.*[A-Z].*)(.*\d.*)(.*\W.*)/;
       if (!regularExpressionPassword.test(data.password)) {
         setFormError((prev) => {
           return {
@@ -87,12 +88,7 @@ export default function Index() {
 
     window.localStorage.setItem("token", "1");
     dispatchData({ type: "DELETE" });
-    setIsLoggedIn(true);
-  };
-
-  const handleLogout = () => {
-    window.localStorage.removeItem("token");
-    setIsLoggedIn(false);
+    ctx.setIsLoggedIn(true);
   };
 
   return (
@@ -100,17 +96,13 @@ export default function Index() {
       <section className="h-screen">
         <div className="px-6 h-full text-gray-800">
           <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
-            {isLoggedIn ? (
-              <Home onLogout={handleLogout} />
-            ) : (
-              <div className="grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
-                <img
-                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-                  className="w-full"
-                  alt="Sample image"
-                />
-              </div>
-            )}
+            <div className="grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
+              <img
+                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                className="w-full"
+                alt="Sample image"
+              />
+            </div>
 
             <Form
               className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0"

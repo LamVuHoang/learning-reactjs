@@ -1,10 +1,12 @@
-import Home from "./Components/SignIn/index"
-import './App.css';
+import Home from "./Components/Home/index";
+import SignIn from "./Components/SignIn/index";
+import "./App.css";
+import { authContext } from "./Store/auth-context";
+import { useContext } from "react";
 
 function App() {
-  return (
-    <Home />
-  );
+  const ctx = useContext(authContext);
+  return <>{ctx.isLoggedIn ? <Home /> : <SignIn />}</>;
 }
 
 export default App;
