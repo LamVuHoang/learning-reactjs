@@ -1,31 +1,34 @@
-import { useEffect, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import axios from "axios";
 
-export default function useFetchData(url) {
+export default function useFetchData() {
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState(undefined);
-  const [error, setError] = useState(undefined);
+  const [error, setError] = useState(null);
 
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(async (requestConfig, handleDataFn) => {
     setIsLoading(true);
     try {
-      const response = await axios.get(url);
+      const response = await axios({
+        method: requestConfig.method,
+        url: requestConfig.url,
+      });
 
-      if (response.code !== 200) {
-        setError(response.message);
+      if (response.status !== 200 && response.status !== 201) {
+        throw new Error("Request failed!");
       }
 
-      setData(response.data);
+      const data = await response.data;
+      handleDataFn(data);
     } catch (errors) {
-      setError(errors);
+      setError(errors.message || "Something went wrong!");
     }
 
     setIsLoading(false);
   }, []);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  return isLoading ? "Loading..." : error ? error.message : data.name;
+  return {
+    isLoading,
+    error,
+    fetchData,
+  };
 }

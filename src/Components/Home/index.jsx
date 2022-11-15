@@ -1,30 +1,38 @@
-import { useContext } from "react";
-import { authContext } from "../../Store/auth-context";
+import { useEffect, useState } from "react";
 import useFetchData from "../../Hooks/useFetchData";
 export default function Index() {
-  const ctx = useContext(authContext);
+  const { isLoading, error, fetchData } = useFetchData();
+  const [data, setData] = useState(undefined);
 
-  const userData = useFetchData(
-    `https://swapi.dev/api/peoples/${window.localStorage.getItem("token")}`
-  );
+  useEffect(() => {
+    const requestConfig = {
+      url: "https://lamreactjs-default-rtdb.asia-southeast1.firebasedatabase.app/alpha.json",
+    };
+    const handleDataFn = (dataObject) => {
+      const resultData = [];
+      for (let key in dataObject) {
+        resultData.push({ id: key, data: dataObject[key] });
+      }
+      setData(resultData);
+    };
 
-  const onLogout = () => {
-    window.localStorage.removeItem("token");
-    ctx.setIsLoggedIn(false);
-  };
+    fetchData(requestConfig, handleDataFn);
+  }, [fetchData]);
 
   return (
     <>
-      <div className="grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
-        {userData}
+      <div className="text-center p-10">
+        {isLoading && <div>Loading...</div>}
+        {error && <div className="text-red-600">{error}</div>}
+        {data &&
+          data.map((item) => {
+            return (
+              <div key={item.id}>
+                <div className="text-green-600">{item.data}</div>
+              </div>
+            );
+          })}
         <br />
-        <button
-          type="button"
-          className="bg-indigo-600 text-white p-2 font-bold rounded-md"
-          onClick={onLogout}
-        >
-          Delete Token
-        </button>
       </div>
     </>
   );

@@ -1,12 +1,14 @@
 import Home from "./Components/Home/index";
-import SignIn from "./Components/SignIn/index";
+import AddTask from "./Components/AddTask/index";
 import "./App.css";
-import { authContext } from "./Store/auth-context";
-import { useContext } from "react";
 
 function App() {
-  const ctx = useContext(authContext);
-  return <>{ctx.isLoggedIn ? <Home /> : <SignIn />}</>;
+  return (
+    <>
+      <AddTask />
+      <Home />
+    </>
+  );
 }
 
 export default App;
