@@ -1,13 +1,59 @@
-export default function Index() {
+import { useEffect, useRef, useState } from "react";
 
-  
+export default function Index() {
+  const [task, setTask] = useState("");
+  const [touched, setTouched] = useState(false);
+  const [disableSubmit, setDisableSubmit] = useState(true);
+  const taskInput = useRef();
+
+  const handleInputTask = (event) => {
+    const newTask = event.target.value;
+    console.log(newTask);
+    setTask(newTask);
+  };
+
+  const handleBlur = () => {
+    setTouched(true);
+  };
+
+  let error = "";
+  if (touched === true && task === "") error = "Please fill in the task";
+  useEffect(() => {
+    if (task !== "") setDisableSubmit(false);
+    else setDisableSubmit(true);
+  }, [task]);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // console.log("task: ", task);
+    setTask("");
+    setTouched(false);
+    taskInput.current.focus();
+  };
 
   return (
-    <div className="text-center">
-      <form>
-        <input className="border border-black m-3" type="text" />
-        <input className="p-3 bg-purple-600 rounded-xl text-white font-bold" type="submit" />
-      </form>
-    </div>
+    <>
+      <div className="text-center">
+        <form onSubmit={handleSubmit}>
+          <input
+            ref={taskInput}
+            value={task}
+            onChange={handleInputTask}
+            onBlur={handleBlur}
+            className="border text-center border-black m-3"
+            type="text"
+          />
+          <button
+            className={`p-3 rounded-xl text-white font-bold ${
+              disableSubmit ? " bg-gray-300" : "bg-purple-600"
+            }`}
+            disabled={disableSubmit}
+          >
+            Submit
+          </button>
+        </form>
+        <span className="text-red-600">{error}</span>
+      </div>
+    </>
   );
 }
