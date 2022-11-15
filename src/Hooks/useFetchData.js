@@ -11,6 +11,7 @@ export default function useFetchData() {
       const response = await axios({
         method: requestConfig.method,
         url: requestConfig.url,
+        data: JSON.stringify(requestConfig.data),
       });
 
       if (response.status !== 200 && response.status !== 201) {

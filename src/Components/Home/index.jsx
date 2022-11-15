@@ -20,8 +20,8 @@ export default function Index() {
   }, [fetchData]);
 
   return (
-    <>
-      <div className="text-center p-10">
+    <div className="fixed">
+      <div className="left-1/2 w-1/2 text-center p-10">
         {isLoading && <div>Loading...</div>}
         {error && <div className="text-red-600">{error}</div>}
         {data &&
@@ -34,6 +34,6 @@ export default function Index() {
           })}
         <br />
       </div>
-    </>
+    </div>
   );
 }

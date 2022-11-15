@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from "react";
+import useFetchData from "../../Hooks/useFetchData";
 
 export default function Index() {
   const [task, setTask] = useState("");
   const [touched, setTouched] = useState(false);
   const [disableSubmit, setDisableSubmit] = useState(true);
   const taskInput = useRef();
+  const { fetchData } = useFetchData();
 
   const handleInputTask = (event) => {
     const newTask = event.target.value;
-    console.log(newTask);
     setTask(newTask);
   };
 
@@ -25,7 +26,12 @@ export default function Index() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // console.log("task: ", task);
+
+    fetchData({
+      method: "POST",
+      url: "https://lamreactjs-default-rtdb.asia-southeast1.firebasedatabase.app/alpha.json",
+      data: task,
+    });
     setTask("");
     setTouched(false);
     taskInput.current.focus();
