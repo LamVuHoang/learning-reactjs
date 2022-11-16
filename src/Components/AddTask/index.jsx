@@ -2,15 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import useFetchData from "../../Hooks/useFetchData";
 
 export default function Index() {
-  const [task, setTask] = useState("");
+  const [name, setName] = useState("");
   const [touched, setTouched] = useState(false);
   const [disableSubmit, setDisableSubmit] = useState(true);
-  const taskInput = useRef();
+  const nameInput = useRef();
   const { fetchData } = useFetchData();
 
-  const handleInputTask = (event) => {
-    const newTask = event.target.value;
-    setTask(newTask);
+  const handleInputName = (event) => {
+    const newName = event.target.value;
+    setName(newName);
   };
 
   const handleBlur = () => {
@@ -18,11 +18,11 @@ export default function Index() {
   };
 
   let error = "";
-  if (touched === true && task === "") error = "Please fill in the task";
+  if (touched === true && name === "") error = "Please fill in the name";
   useEffect(() => {
-    if (task !== "") setDisableSubmit(false);
+    if (name !== "") setDisableSubmit(false);
     else setDisableSubmit(true);
-  }, [task]);
+  }, [name]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -30,11 +30,11 @@ export default function Index() {
     fetchData({
       method: "POST",
       url: "https://lamreactjs-default-rtdb.asia-southeast1.firebasedatabase.app/alpha.json",
-      data: task,
+      data: name,
     });
-    setTask("");
+    setName("");
     setTouched(false);
-    taskInput.current.focus();
+    nameInput.current.focus();
   };
 
   return (
@@ -42,9 +42,9 @@ export default function Index() {
       <div className="text-center">
         <form onSubmit={handleSubmit}>
           <input
-            ref={taskInput}
-            value={task}
-            onChange={handleInputTask}
+            ref={nameInput}
+            value={name}
+            onChange={handleInputName}
             onBlur={handleBlur}
             className="border text-center border-black m-3"
             type="text"
